@@ -1,30 +1,40 @@
 import React, { Component } from 'react';
+import { CardList } from './component/cardList/CardList.component.jsx'
 import './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      monsters: [
-        {
-          name: 'Frankeistein',
-          id: 'asc1'
-        },
-        {
-          name: 'Dracula',
-          id: 'asc2'
-        },
-        {
-          name: 'Zombie',
-          id: 'asc3'
-        },
-      ]
+      monsters: [],
+      searchField: ''
     }
   }
+
+  componentDidMount() {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => response.json())
+      .then(users => this.setState({ monsters: users }))
+  }
+
+  handleChange = e => {
+    const searchField = e.target.value
+    this.setState({ searchField })
+  }
+
+
+
   render() {
     return (
       <div className="App">
-        {this.state.monsters.map(monster => <h1 key={monster.id}>{monster.name}</h1>)}
+        <input
+          type="search"
+          placeholder="search monsters"
+          onChange={this.handleChange}
+        />
+        <CardList
+          monsters={this.state.monsters}
+        />
       </div>
     );
   }
